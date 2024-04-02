@@ -1,0 +1,103 @@
+<resources>
+    <string name="app_name">TugasAkhir</string>
+    <string name="title_home">Home</string>
+    <string name="title_favorite">Favorite</string>
+    <string name="title_profile">Profile</string>
+    <string name="splash">splash</string>
+    <string name="login">Login</string>
+    <string name="keterangan">Selamat Datang di FoodViewer</string>
+    <string name="keterangan1">Temukan Tempat Makan Favoritmu</string>
+    <string name="keterangan2">Continue With Google</string>
+    <string name="restaurant_name">restaurantname</string>
+    <string name="description">Alamat</string>
+    <string name="keterangan3">Ambil Foto</string>
+    <string name="keterangan4">Pilih Foto</string>
+    <string name="keterangan5">Nama :</string>
+    <string name="notelp">08xxxxxxxxxx</string>
+    <string name="salam">Selamat Datang, Michael</string>
+    <string name="deksripsi">Deksripsi :</string>
+    <string name="alamat">Alamat :</string>
+    <string name="isi">Deskripsi</string>
+    <string name="buka">Jam buka</string>
+    <string name="kontak">Kontak :</string>
+    <string name="kontakk">kontakk</string>
+    <string name="bukaa">Jam Buka :</string>
+    <string-array name="data_restaurant_name">
+        <item>Sushi Express</item>
+        <item>Burger King</item>
+        <item>Pizza Hut</item>
+        <item>The Cheesecake Factory</item>
+        <item>Noodle House</item>
+        <item>BBQ Grill House</item>
+        <item>Veggie Delight</item>
+        <item>Seafood Paradise</item>
+        <item>Steakhouse Royale</item>
+        <item>Mexican Fiesta</item>
+    </string-array>
+    <string-array name="data_alamat_restaurant">
+        <item>Jalan Sushi No. 1, Kota Sushi</item>
+        <item>Jalan Burger No. 2, Kota Burger</item>
+        <item>Jalan Pizza No. 3, Kota Pizza</item>
+        <item>Jalan Cheesecake No. 4, Kota Cheesecake</item>
+        <item>Jalan Noodle No. 5, Kota Noodle</item>
+        <item>Jalan Grill No. 6, Kota BBQ</item>
+        <item>Jalan Veggie No. 7, Kota Veggie</item>
+        <item>Jalan Seafood No. 8, Kota Seafood</item>
+        <item>Jalan Steak No. 9, Kota Steak</item>
+        <item>Jalan Mexican No. 10, Kota Mexican</item>
+    </string-array>
+
+    <string-array name="data_alamat_jamBuka">
+        <item>"10:00 WIB"</item>
+        <item>"09:00 WIB"</item>
+        <item>"07:00 WIB"</item>
+        <item>"08:00 WIB"</item>
+        <item>"90:00 WIB"</item>
+        <item>"10:00 WIB"</item>
+        <item>"11:00 WIB"</item>
+        <item>"10:00 WIB"</item>
+        <item>"09:00 WIB"</item>
+        <item>"10:00 WIB"</item>
+    </string-array>
+
+    <string-array name="data_noTelp_restaurant">
+        <item>"123456789"</item>
+        <item>"9876543210"</item>
+        <item>"5551234567"</item>
+        <item>"2223334444"</item>
+        <item>"7778889999"</item>
+        <item>"3332221111"</item>
+        <item>"6667778888"</item>
+        <item>"4445556666"</item>
+        <item>"9998887777"</item>
+        <item>"1112223333"</item>
+    </string-array>
+
+
+
+    <string-array name="data_restaurant_description">
+        <item>Sushi Express adalah tempat yang sempurna untuk para pecinta sushi. Dengan suasana yang nyaman dan pilihan menu yang beragam, restoran ini menawarkan pengalaman kuliner Jepang yang autentik. Mulai dari sushi klasik hingga kreasi unik dari chef kami, setiap hidangan dipersiapkan dengan bahan-bahan berkualitas tinggi dan teknik memasak yang terampil.</item>
+        <item>Burger King adalah destinasi utama untuk pecinta burger sejati. Kami bangga menyajikan burger-burger lezat dengan berbagai pilihan topping dan saus yang menyegarkan. Dari burger klasik hingga inovasi baru yang mengejutkan, setiap gigitan akan membawa Anda dalam perjalanan rasa yang tak terlupakan.</item>
+        <item>Pizza Hut adalah rumah bagi pizza-pizza lezat yang menggugah selera. Dengan resep warisan kami yang telah teruji selama puluhan tahun, kami menjamin kualitas tiada duanya dalam setiap irisannya. Tidak hanya pizza, kami juga menyajikan hidangan Italia lainnya, seperti pasta, salad, dan hidangan pembuka yang menggugah selera.</item>
+        <item>The Cheesecake Factory adalah tempat yang sempurna untuk menyantap hidangan lezat dalam suasana yang menyenangkan. Terkenal dengan cheesecake kami yang legendaris, restoran ini juga menawarkan beragam menu Amerika yang menggugah selera. Dari hidangan pembuka hingga makanan penutup, setiap hidangan dipersiapkan dengan cinta dan dedikasi.</item>
+        <item>Noodle House adalah tempat yang tepat untuk menikmati hidangan mie dan masakan Asia lainnya. Dari mie ramen Jepang hingga mi goreng khas Indonesia, kami menyajikan berbagai hidangan dengan cita rasa yang autentik. Suasana yang ramah dan pelayanan yang hangat membuat setiap kunjungan menjadi pengalaman yang menyenangkan.</item>
+        <item>BBQ Grill House adalah surga bagi pecinta daging panggang. Dengan grill yang panas dan bumbu yang khas, kami menyajikan berbagai macam hidangan daging dengan cita rasa yang memikat. Mulai dari steak premium hingga ayam panggang yang juicy, setiap hidangan di sini dipersiapkan dengan teliti dan disajikan dengan penuh kehangatan.</item>
+        <item>Veggie Delight adalah destinasi utama bagi para pecinta makanan sehat. Dengan menu vegetarian yang kreatif dan beragam, kami membawa Anda dalam perjalanan rasa yang menyegarkan dan menggugah selera. Mulai dari salad segar hingga hidangan utama yang inovatif, setiap hidangan di sini disiapkan dengan bahan-bahan berkualitas dan dipenuhi dengan nutrisi.</item>
+        <item>Seafood Paradise adalah surganya para pecinta hidangan laut. Dengan pilihan menu yang berlimpah dan bahan-bahan segar yang dipilih dengan teliti, kami menjamin pengalaman kuliner yang tak terlupakan. Mulai dari udang segar hingga lobster bakar yang lezat, setiap hidangan di sini memanjakan lidah Anda dengan rasa autentik.</item>
+        <item>Steakhouse Royale adalah tempat yang sempurna untuk menikmati daging panggang premium dalam suasana yang mewah. Dengan pilihan steak yang berkualitas tinggi dan saus yang lezat, kami menawarkan pengalaman kuliner yang eksklusif dan tak tertandingi. Setiap gigitan akan membawa Anda dalam perjalanan rasa yang menggugah selera.</item>
+        <item>Mexican Fiesta adalah tempat yang tepat untuk menikmati hidangan khas Meksiko yang autentik. Dengan rempah-rempah dan bahan-bahan segar, kami menyajikan hidangan seperti taco, burrito, dan fajita dengan cita rasa yang otentik dan meyakinkan. Setiap kunjungan akan membawa Anda dalam perjalanan rasa yang mengasyikkan dan memuaskan.</item>
+    </string-array>
+
+    <integer-array name="data_photo">
+        <item>@drawable/sushi</item>
+        <item>@drawable/burger</item>
+        <item>@drawable/pizza</item>
+        <item>@drawable/cheesecake</item>
+        <item>@drawable/noodle</item>
+        <item>@drawable/bbq_grill</item>
+        <item>@drawable/vegetables</item>
+        <item>@drawable/seafood</item>
+        <item>@drawable/steak</item>
+        <item>@drawable/mexican</item>
+    </integer-array>
+</resources>
