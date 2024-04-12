@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "257095304390",
+    "project_id": "andro-60dd8",
+    "storage_bucket": "andro-60dd8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:257095304390:android:afda6c2bc01cdc99ea03c7",
+        "android_client_info": {
+          "package_name": "com.dicoding.tugasakhir"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "257095304390-9b5eem1diriob6kv6lcr41gqgulglm4h.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dicoding.tugasakhir",
+            "certificate_hash": "767890374c660b81001833b62c6af61c624f389e"
+          }
+        },
+        {
+          "client_id": "257095304390-54n84b5p7329qidj451leove6ni1tjig.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBGATPpblMp1EjrAyLCh_dx8PMxX7kZMbM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "257095304390-54n84b5p7329qidj451leove6ni1tjig.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
