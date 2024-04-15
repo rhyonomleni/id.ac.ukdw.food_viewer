@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.profile.ProfileFragment">
+    tools:context=".ui.profile.ProfileFragment"
+    tools:layout_editor_absoluteX="0dp"
+    tools:layout_editor_absoluteY="32dp">
 
 
     <de.hdodenhof.circleimageview.CircleImageView
@@ -19,34 +21,44 @@
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.124" />
-
-    <Button
-        android:id="@+id/btnUbahProfile"
-        android:layout_width="230dp"
-        android:layout_height="60dp"
-        android:layout_marginTop="52dp"
-        android:text="UBAH PROFILE"
-        android:textSize="20dp"
-        android:textStyle="bold"
-        android:textColor="@color/black"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/circleImageView" />
+        app:layout_constraintVertical_bias="0.052" />
 
     <Button
         android:id="@+id/btnLogout"
         android:layout_width="230dp"
         android:layout_height="60dp"
-        android:layout_marginTop="28dp"
-        android:textStyle="bold"
+        android:layout_marginTop="40dp"
+        android:text="LOGOUT"
         android:textColor="@color/black"
         android:textSize="20dp"
-        android:text="LOGOUT"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnUbahProfile" />
+
+    <Button
+        android:id="@+id/btnUbahProfile"
+        android:layout_width="230dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="152dp"
+        android:text="UBAH PROFILE"
+        android:textColor="@color/black"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/circleImageView" />
+
+    <TextView
+        android:id="@+id/username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="30dp"
+        app:layout_constraintBottom_toTopOf="@+id/btnUbahProfile"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/circleImageView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

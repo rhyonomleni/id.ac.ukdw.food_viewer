@@ -11,6 +11,7 @@ import android.widget.Button
 import android.widget.Toast
 import android.widget.Toast.LENGTH_SHORT
 import androidx.activity.result.contract.ActivityResultContracts
+import com.dicoding.tugasakhir.ui.home.HomeFragment
 import com.dicoding.tugasakhir.ui.profile.ProfileFragment
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -38,6 +39,11 @@ class LoginActivity : AppCompatActivity() {
 
 
         auth = FirebaseAuth.getInstance()
+        val currentUser = auth.currentUser
+        if (currentUser != null) {
+            // User is signed in, redirect to another activity (e.g., HomeActivity)
+            redirectToHomeScreen()
+        }
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(com.firebase.ui.auth.R.string.default_web_client_id))
             .requestEmail()
@@ -55,6 +61,12 @@ class LoginActivity : AppCompatActivity() {
 //            val intent = googleSignInClient.signInIntent
 //            startActivityForResult(intent, RC_SIGN_IN)
         }
+    }
+
+    private fun redirectToHomeScreen() {
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 
     private fun signIn() {
@@ -91,6 +103,7 @@ class LoginActivity : AppCompatActivity() {
                 if (user != null) {
                     val email = user.email // Mendapatkan email pengguna
                     val googleId = user.uid // Mendapatkan Google ID pengguna
+                    val username = user.displayName
                     val profilePictureUrl =
                         user.photoUrl?.toString() // Mendapatkan URL gambar profil pengguna
 
@@ -101,7 +114,8 @@ class LoginActivity : AppCompatActivity() {
                     val userMap = hashMapOf(
                         "email" to email,
                         "googleId" to googleId,
-                        "profilePictureUrl" to profilePictureUrl
+                        "profilePicture" to profilePictureUrl,
+                        "username" to username
                     )
 
                     // Menyimpan data ke Firestore
@@ -153,8 +167,29 @@ class LoginActivity : AppCompatActivity() {
             }
     }
 
-    fun getGoogleSignInClient(): GoogleSignInClient {
-        return googleSignInClient
-    }
+//    private fun firebaseAuthWithGoogle(idToken: String) {
+//        val credential = GoogleAuthProvider.getCredential(idToken, null)
+//        auth.signInWithCredential(credential)
+//            .addOnCompleteListener(this) { task ->
+//                if (task.isSuccessful) {
+//                    // Sign in success, check if user email matches expected email
+//                    val user = auth.currentUser
+//                    if (user != null) {
+//                        val expectedEmail = "example@example.com" // Ganti dengan email yang diharapkan
+//                        if (user.email == expectedEmail) {
+//                            // Email sesuai, lanjutkan ke halaman utama
+//                            redirectToHomeScreen()
+//                        } else {
+//                            // Email tidak sesuai, sign out pengguna
+//                            signOutAndRedirectToSignIn()
+//                        }
+//                    }
+//                } else {
+//                    // Sign in failed, handle error
+//                    // ...
+//                }
+//            }
+//    }
+
 
 }
