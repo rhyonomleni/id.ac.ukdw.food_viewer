@@ -15,6 +15,9 @@ import com.google.firebase.firestore.FirebaseFirestore
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.navigation.NavDirections
+import androidx.navigation.findNavController
+import com.dicoding.tugasakhir.ui.profile.ProfileFragment
 
 class UbahActivity : AppCompatActivity() {
     val db = FirebaseFirestore.getInstance()
@@ -41,6 +44,21 @@ class UbahActivity : AppCompatActivity() {
         val galeri = findViewById<Button>(R.id.btnPilihFoto)
         galeri.setOnClickListener {
             openGaleri()
+        }
+
+        val usernameEditText = findViewById<EditText>(R.id.editText)
+        val simpan = findViewById<Button>(R.id.btnSimpan)
+        simpan.setOnClickListener {
+            val newName = usernameEditText.text.toString().trim()
+
+            if (newName.isNotEmpty()) {
+                // Memperbarui field 'name' di Firestore
+                updateName(newName)
+            } else {
+                // Tanggapan jika EditText kosong
+            }
+            intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
         }
 
         // Panggil fungsi untuk mengambil data dari Firestore
@@ -97,6 +115,23 @@ class UbahActivity : AppCompatActivity() {
             }
             .addOnFailureListener { exception ->
                 // Gagal mengambil data dari Firestore
+                // Tambahkan penanganan jika terjadi kesalahan
+            }
+    }
+
+    private fun updateName(newName: String) {
+        val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
+        val userData = hashMapOf(
+            "username" to newName
+        )
+
+        db.collection("users").document(userId)
+            .update(userData as Map<String, Any>)
+            .addOnSuccessListener {
+                // Field 'name' berhasil diperbarui
+            }
+            .addOnFailureListener { exception ->
+                // Gagal memperbarui field 'name'
                 // Tambahkan penanganan jika terjadi kesalahan
             }
     }

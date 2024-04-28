@@ -54,26 +54,17 @@ class ProfileFragment : Fragment() {
         db.collection("users").document(userId)
             .get()
             .addOnSuccessListener { document ->
-                if (document != null && document.exists()) {
-                    // Dokumen ditemukan, ambil data username dari Firestore
-                    // Inflate the layout for this fragment
-                    val view = inflater.inflate(R.layout.fragment_profile, container, false)
+                // Dokumen ditemukan, ambil data username dari Firestore
+                // Inflate the layout for this fragment
+                val view = inflater.inflate(R.layout.fragment_profile, container, false)
 
-                    val profilePicture = document.getString("username")
+                val profilePicture = document.getString("username")
 
-                    // Dapatkan referensi ke TextView dengan ID "username" dari layout fragment
-                    usernameText = view.findViewById<TextView>(R.id.username)
+                // Dapatkan referensi ke TextView dengan ID "username" dari layout fragment
+                usernameText = view.findViewById<TextView>(R.id.username)
 
-                    // Contoh penggunaan setText() untuk mengatur teks pada TextView
-                    usernameText.setText(profilePicture)
-                    if (profilePicture != null) {
-                        Log.d(ContentValues.TAG, profilePicture)
-                    }
-                    Log.d(ContentValues.TAG, "Hahahahahaha")
-                } else {
-                    // Dokumen tidak ditemukan atau kosong
-                    // Tambahkan penanganan jika dokumen tidak ditemukan
-                }
+                // Contoh penggunaan setText() untuk mengatur teks pada TextView
+                usernameText.text = profilePicture
             }
         getUserDataFromFirestore(userId)
         val db = FirebaseFirestore.getInstance()
@@ -103,6 +94,7 @@ class ProfileFragment : Fragment() {
         return root
     }
 
+
     private fun getUserDataFromFirestore(
         userId: String,
     ) {
@@ -113,10 +105,12 @@ class ProfileFragment : Fragment() {
                 if (document.exists()) {
                     // Dokumen ditemukan, ambil data dari Firestore
                     val profilePicture = document.getString("profilePicture")
+                    val username = document.getString("username")
 
                     // Tampilkan data di UI (contoh: TextView di layout fragment_profile.xml)
                     profilePicture?.let {
                         view?.let { it1 ->
+                            requireView().findViewById<TextView>(R.id.username)?.text = username
                             Glide.with(requireContext())
                                 .load(profilePicture)
                                 .placeholder(androidx.appcompat.R.drawable.abc_btn_default_mtrl_shape)

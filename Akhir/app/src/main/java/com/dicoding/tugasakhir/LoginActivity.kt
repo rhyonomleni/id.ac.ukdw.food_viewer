@@ -110,30 +110,66 @@ class LoginActivity : AppCompatActivity() {
                     // Mengakses Firestore
                     val db = FirebaseFirestore.getInstance()
 
-                    // Membuat objek untuk disimpan di Firestore
-                    val userMap = hashMapOf(
-                        "email" to email,
-                        "googleId" to googleId,
-                        "profilePicture" to profilePictureUrl,
-                        "username" to username
-                    )
+                    db.collection("users").whereEqualTo("email", email).get()
+                        .addOnSuccessListener { querySnapshot ->
+                            if (querySnapshot.isEmpty) {
+                                // Jika email belum ada di Firestore, simpan data pengguna
+                                val userMap = hashMapOf(
+                                    "email" to email,
+                                    "googleId" to googleId,
+                                    "profilePicture" to profilePictureUrl,
+                                    "username" to username
+                                )
 
-                    // Menyimpan data ke Firestore
-                    db.collection("users").document(user.uid)
-                        .set(userMap)
-                        .addOnSuccessListener {
-                            Log.d(TAG, "DocumentSnapshot successfully written!")
-                            // Tambahkan logika atau tindakan lain yang perlu dilakukan setelah berhasil menyimpan ke Firestore
+                                // Menyimpan data ke Firestore
+                                db.collection("users").document(user.uid)
+                                    .set(userMap)
+                                    .addOnSuccessListener {
+                                        Log.d(TAG, "DocumentSnapshot successfully written!")
+                                        // Tambahkan logika atau tindakan lain yang perlu dilakukan setelah berhasil menyimpan ke Firestore
+                                    }
+                                    .addOnFailureListener { e ->
+                                        Log.w(TAG, "Error writing document", e)
+                                        // Tambahkan penanganan kesalahan jika gagal menyimpan ke Firestore
+                                    }
+                                val intent = Intent(this, MainActivity::class.java)
+                                intent.putExtra("email", account.email)
+                                intent.putExtra("name", account.displayName)
+                                startActivity(intent)
+                            } else {
+                                // Jika email sudah ada di Firestore, lanjutkan ke MainActivity
+                                val intent = Intent(this, MainActivity::class.java)
+                                intent.putExtra("email", account.email)
+                                intent.putExtra("name", account.displayName)
+                                startActivity(intent)
+                            }
                         }
-                        .addOnFailureListener { e ->
-                            Log.w(TAG, "Error writing document", e)
-                            // Tambahkan penanganan kesalahan jika gagal menyimpan ke Firestore
-                        }
+
+                    // Membuat objek untuk disimpan di Firestore
+//                    val userMap = hashMapOf(
+//                        "email" to email,
+//                        "googleId" to googleId,
+//                        "profilePicture" to profilePictureUrl,
+//                        "username" to username
+//                    )
+//
+//                    // Menyimpan data ke Firestore
+//                    db.collection("users").document(user.uid)
+//                        .set(userMap)
+//                        .addOnSuccessListener {
+//                            Log.d(TAG, "DocumentSnapshot successfully written!")
+//                            // Tambahkan logika atau tindakan lain yang perlu dilakukan setelah berhasil menyimpan ke Firestore
+//                        }
+//                        .addOnFailureListener { e ->
+//                            Log.w(TAG, "Error writing document", e)
+//                            // Tambahkan penanganan kesalahan jika gagal menyimpan ke Firestore
+//                        }
+//
+//                    val intent = Intent(this, MainActivity::class.java)
+//                    intent.putExtra("email", account.email)
+//                    intent.putExtra("name", account.displayName)
+//                    startActivity(intent)
                 }
-                val intent = Intent(this, MainActivity::class.java)
-                intent.putExtra("email", account.email)
-                intent.putExtra("name", account.displayName)
-                startActivity(intent)
             }else{
                 Toast.makeText(this, it.exception.toString(), Toast.LENGTH_SHORT).show()
             }
@@ -166,30 +202,4 @@ class LoginActivity : AppCompatActivity() {
                 Toast.makeText(applicationContext, error.localizedMessage, LENGTH_SHORT).show()
             }
     }
-
-//    private fun firebaseAuthWithGoogle(idToken: String) {
-//        val credential = GoogleAuthProvider.getCredential(idToken, null)
-//        auth.signInWithCredential(credential)
-//            .addOnCompleteListener(this) { task ->
-//                if (task.isSuccessful) {
-//                    // Sign in success, check if user email matches expected email
-//                    val user = auth.currentUser
-//                    if (user != null) {
-//                        val expectedEmail = "example@example.com" // Ganti dengan email yang diharapkan
-//                        if (user.email == expectedEmail) {
-//                            // Email sesuai, lanjutkan ke halaman utama
-//                            redirectToHomeScreen()
-//                        } else {
-//                            // Email tidak sesuai, sign out pengguna
-//                            signOutAndRedirectToSignIn()
-//                        }
-//                    }
-//                } else {
-//                    // Sign in failed, handle error
-//                    // ...
-//                }
-//            }
-//    }
-
-
 }
