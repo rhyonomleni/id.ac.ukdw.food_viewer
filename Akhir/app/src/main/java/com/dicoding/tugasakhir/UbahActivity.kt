@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.drawable.BitmapDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
@@ -18,9 +19,17 @@ import androidx.core.content.ContextCompat
 import androidx.navigation.NavDirections
 import androidx.navigation.findNavController
 import com.dicoding.tugasakhir.ui.profile.ProfileFragment
+import com.google.firebase.storage.FirebaseStorage
+import de.hdodenhof.circleimageview.CircleImageView
+import java.io.ByteArrayOutputStream
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+import java.util.UUID
 
 class UbahActivity : AppCompatActivity() {
     val db = FirebaseFirestore.getInstance()
+    private var currentPhotoPath: String = ""
     private val REQUEST_IMAGE_CAPTURE = 101
     private val pickImageLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
         if (uri != null) {
@@ -50,6 +59,8 @@ class UbahActivity : AppCompatActivity() {
         val simpan = findViewById<Button>(R.id.btnSimpan)
         simpan.setOnClickListener {
             val newName = usernameEditText.text.toString().trim()
+            uploadFoto(currentPhotoPath)
+
 
             if (newName.isNotEmpty()) {
                 // Memperbarui field 'name' di Firestore
@@ -65,6 +76,58 @@ class UbahActivity : AppCompatActivity() {
         getUserDataFromFirestore(userId)
         getUsernameFromFirestore(userId)
 
+    }
+
+    private fun uploadFoto(namaFile: String) {
+        // Menginisialisasi Firebase Storage
+        val storage = FirebaseStorage.getInstance()
+
+// Menginisialisasi referensi ke Firebase Storage dengan nama file yang unik
+//        val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
+//        val fileName = "image_$timeStamp.jpg"
+//        val storageRef = storage.reference.child("images/$namaFile")
+
+// Mengompres bitmap menjadi format JPG dengan kualitas tertentu (misalnya, 80)
+        val baos = ByteArrayOutputStream()
+        val foto = findViewById<CircleImageView>(R.id.circleImageView)
+        // Mendapatkan gambar dari CircleImageView sebagai Bitmap
+        val bitmap = (foto.drawable as BitmapDrawable).bitmap
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 80, baos)
+        val imageData = baos.toByteArray()
+
+// Melakukan upload gambar ke Firebase Storage
+        val storageRef = FirebaseStorage.getInstance().reference.child("images/$namaFile")
+        // File dengan nama yang sama tidak ditemukan
+        if (namaFile != ""){
+            val uploadTask = storageRef.putBytes(imageData)
+            uploadTask.addOnSuccessListener {
+                // Upload berhasil, dapatkan URL gambar yang diunggah
+                storageRef.downloadUrl.addOnSuccessListener { uri ->
+                    val imageUrl = uri.toString()
+                    // Lakukan sesuatu dengan URL gambar, misalnya, menyimpannya ke Firestore
+                    saveImageUrlToFirestore(imageUrl)
+                }.addOnFailureListener { exception ->
+                    // Gagal mendapatkan URL gambar
+                }
+            }.addOnFailureListener { exception ->
+                // Gagal upload gambar
+            }
+        }
+    }
+
+    private fun saveImageUrlToFirestore(imageUrl: String) {
+        val userId = FirebaseAuth.getInstance().currentUser?.uid
+        val db = FirebaseFirestore.getInstance()
+
+        userId?.let {
+            val userRef = db.collection("users").document(userId)
+            userRef.update("profilePicture", imageUrl)
+                .addOnSuccessListener {
+                    // URL gambar berhasil disimpan di Firestore
+                }.addOnFailureListener { exception ->
+                    // Gagal menyimpan URL gambar di Firestore
+                }
+        }
     }
 
     private fun getUserDataFromFirestore(userId: String) {
@@ -137,7 +200,19 @@ class UbahActivity : AppCompatActivity() {
     }
 
     private fun openCamera() {
+        // Mendapatkan timestamp untuk nama file
+        val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
+
+        // Membuat nama file berdasarkan timestamp
+        val imageFileName = "Image_$timeStamp.jpg"
+
+        currentPhotoPath = imageFileName
+
+        // Menyiapkan intent untuk memanggil aplikasi kamera
         val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+
+        // Menambahkan extra data untuk memberikan nama file pada foto yang diambil
+        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageFileName)
         if (takePictureIntent.resolveActivity(packageManager) != null) {
             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
         }
@@ -165,49 +240,5 @@ class UbahActivity : AppCompatActivity() {
             }
         }
     }
-
-
-
-//    private fun openGaleri() {
-//        // Gunakan intent untuk membuka aplikasi galeri foto
-//        val galleryIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-//        startActivityForResult(galleryIntent, REQUEST_IMAGE_CAPTURE)
-//        val imageBitmap = intent?.extras?.get("data") as Bitmap
-//        // Lakukan sesuatu dengan gambar yang diambil (imageBitmap) di sini
-//        imageBitmap?.let {
-//            Glide.with(this@UbahActivity)
-//                .load(imageBitmap)
-//                .placeholder(R.drawable.account)
-//                .error(R.drawable.account)
-//                .into(findViewById(R.id.circleImageView))
-//        }
-//    }
-
-
-//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-//        super.onActivityResult(requestCode, resultCode, data)
-//
-//        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
-//            val selectedImageUri = data?.data ?: return  // Handle potential null URI
-//            val imageBitmap = try {
-//                // Attempt to safely decode the image from the URI
-//                val inputStream = contentResolver.openInputStream(selectedImageUri)
-//                BitmapFactory.decodeStream(inputStream)
-//            } catch (e: Exception) {
-//                // Handle potential exceptions during image decoding (optional)
-//                e.printStackTrace()
-//                null
-//            }
-//
-//            imageBitmap?.let {
-//                // Use Glide to load the image into the circleImageView
-//                Glide.with(this@UbahActivity)
-//                    .load(it)
-//                    .placeholder(R.drawable.account)
-//                    .error(R.drawable.account)
-//                    .into(findViewById(R.id.circleImageView))
-//            }
-//        }
-//    }
 
 }

@@ -63,6 +63,8 @@ dependencies {
     annotationProcessor ("com.github.bumptech.glide:compiler:4.12.0")
     implementation("androidx.activity:activity-ktx:1.5.1")
     implementation("androidx.activity:activity-compose:1.5.1")
+    implementation ("com.google.firebase:firebase-storage:20.0.0")
+
 
 
 }
