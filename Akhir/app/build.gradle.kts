@@ -10,7 +10,7 @@ android {
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.dicoding.tugasakhir"
+        applicationId = "id.ac.ukdw.food_viewer"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
