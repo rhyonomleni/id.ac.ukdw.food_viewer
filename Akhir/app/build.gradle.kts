@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.dicoding.tugasakhir"
+    namespace = "id.ac.ukdw.food_viewer"
     compileSdk = 34
 
     defaultConfig {
