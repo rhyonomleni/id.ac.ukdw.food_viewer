@@ -5,9 +5,11 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import com.bumptech.glide.Glide
@@ -83,10 +85,6 @@ class UbahActivity : AppCompatActivity() {
         // Menginisialisasi Firebase Storage
         val storage = FirebaseStorage.getInstance()
 
-// Menginisialisasi referensi ke Firebase Storage dengan nama file yang unik
-//        val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
-//        val fileName = "image_$timeStamp.jpg"
-//        val storageRef = storage.reference.child("images/$namaFile")
 
 // Mengompres bitmap menjadi format JPG dengan kualitas tertentu (misalnya, 80)
         val baos = ByteArrayOutputStream()
@@ -97,7 +95,7 @@ class UbahActivity : AppCompatActivity() {
         val imageData = baos.toByteArray()
 
 // Melakukan upload gambar ke Firebase Storage
-        val storageRef = FirebaseStorage.getInstance().reference.child("images/$namaFile")
+        val storageRef = storage.reference.child("images/$namaFile")
         // File dengan nama yang sama tidak ditemukan
         if (namaFile != ""){
             val uploadTask = storageRef.putBytes(imageData)
@@ -228,18 +226,60 @@ class UbahActivity : AppCompatActivity() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        Log.i("Uri awal", data.toString())
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            val imageBitmap = data?.extras?.get("data") as Bitmap
-            // Lakukan sesuatu dengan gambar yang diambil (imageBitmap) di sini
-            imageBitmap?.let {
-                Glide.with(this@UbahActivity)
-                    .load(imageBitmap)
-                    .placeholder(R.drawable.account)
-                    .error(R.drawable.account)
-                    .into(findViewById(R.id.circleImageView))
+            try {
+                val imageBitmap = data?.extras?.get("data") as Bitmap
+                // Lakukan sesuatu dengan gambar yang diambil (imageBitmap) di sini
+                imageBitmap?.let {
+                    Glide.with(this@UbahActivity)
+                        .load(imageBitmap)
+                        .placeholder(R.drawable.account)
+                        .error(R.drawable.account)
+                        .into(findViewById(R.id.circleImageView))
+                }
+                Log.i("Uri dari galeri", imageBitmap.toString())
+            } catch (e: Exception){
+                val imageUri: Uri? = data?.data
+                val bitmap: Bitmap? = imageUri?.let { contentResolver.openInputStream(it)?.use(BitmapFactory::decodeStream) }
+//                imageUri?.let { uri ->
+//                    // Load the image from URI using Glide
+//                    Glide.with(this@UbahActivity)
+//                        .load(uri)
+//                        .placeholder(R.drawable.account)
+//                        .error(R.drawable.account)
+//                        .into(findViewById(R.id.circleImageView))
+
+                bitmap?.let {
+                    Glide.with(this@UbahActivity)
+                        .load(bitmap)
+                        .placeholder(R.drawable.account)
+                        .error(R.drawable.account)
+                        .into(findViewById(R.id.circleImageView))
+                }
+                Log.i("Uri dari galeri", bitmap.toString())
+//                }
+
             }
+
+
         }
     }
+
+//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+//        super.onActivityResult(requestCode, resultCode, data)
+//        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+//            val imageUri: Uri? = data?.data
+//            imageUri?.let { uri ->
+//                // Load the image from URI using Glide
+//                Glide.with(this@UbahActivity)
+//                    .load(uri)
+//                    .placeholder(R.drawable.account)
+//                    .error(R.drawable.account)
+//                    .into(findViewById(R.id.circleImageView))
+//            }
+//        }
+//    }
 
 }
