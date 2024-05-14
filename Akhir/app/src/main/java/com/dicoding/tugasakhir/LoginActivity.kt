@@ -145,7 +145,7 @@ class LoginActivity : AppCompatActivity() {
                             }
                         }
 
-                    // Membuat objek untuk disimpan di Firestore
+                    // Membuat objek untuk disimpan di Firestor
 //                    val userMap = hashMapOf(
 //                        "email" to email,
 //                        "googleId" to googleId,

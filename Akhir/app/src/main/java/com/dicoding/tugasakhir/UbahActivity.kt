@@ -1,6 +1,7 @@
 package com.dicoding.tugasakhir
 
 import android.app.Activity
+import android.app.ProgressDialog
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -24,6 +25,7 @@ import com.dicoding.tugasakhir.ui.profile.ProfileFragment
 import com.google.firebase.storage.FirebaseStorage
 import de.hdodenhof.circleimageview.CircleImageView
 import com.dicoding.tugasakhir.R
+import com.dicoding.tugasakhir.databinding.ActivityUbahBinding
 import java.io.ByteArrayOutputStream
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -32,6 +34,7 @@ import java.util.UUID
 
 class UbahActivity : AppCompatActivity() {
     val db = FirebaseFirestore.getInstance()
+    private lateinit var binding : ActivityUbahBinding
     private var currentPhotoPath: String = ""
     private val REQUEST_IMAGE_CAPTURE = 101
     private val pickImageLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
@@ -82,6 +85,8 @@ class UbahActivity : AppCompatActivity() {
     }
 
     private fun uploadFoto(namaFile: String) {
+        val auth = FirebaseAuth.getInstance()
+        val currentUser = auth.currentUser?.displayName
         // Menginisialisasi Firebase Storage
         val storage = FirebaseStorage.getInstance()
 
@@ -95,7 +100,7 @@ class UbahActivity : AppCompatActivity() {
         val imageData = baos.toByteArray()
 
 // Melakukan upload gambar ke Firebase Storage
-        val storageRef = storage.reference.child("images/$namaFile")
+        val storageRef = storage.reference.child(currentUser.toString()+"/images/$namaFile")
         // File dengan nama yang sama tidak ditemukan
         if (namaFile != ""){
             val uploadTask = storageRef.putBytes(imageData)
@@ -113,6 +118,23 @@ class UbahActivity : AppCompatActivity() {
             }
         }
     }
+
+//    private fun uploadImage(){
+//        val progressDialog = ProgressDialog(this)
+//        progressDialog.setMessage("Mengupdate Data...")
+//        progressDialog.setCancelable(false)
+//        progressDialog.show()
+//
+//        val storageRef = FirebaseStorage.getInstance().getReference("images/")
+//        storageRef.putFile(ImageUri).addOnSuccessListener {
+//            binding.circleImageView.setImageURI(ImageUri)
+//            Toast.makeText(this, "Berhasil Mengganti Foto", Toast.LENGTH_SHORT).show()
+//            if (progressDialog.isShowing) progressDialog.dismiss()
+//        }.addOnFailureListener{
+//            if (progressDialog.isShowing) progressDialog.dismiss()
+//            Toast.makeText(this, "Gagal Mengganti Foto", Toast.LENGTH_SHORT).show()
+//        }
+//    }
 
     private fun saveImageUrlToFirestore(imageUrl: String) {
         val userId = FirebaseAuth.getInstance().currentUser?.uid
@@ -241,7 +263,7 @@ class UbahActivity : AppCompatActivity() {
                 }
                 Log.i("Uri dari galeri", imageBitmap.toString())
             } catch (e: Exception){
-                val imageUri: Uri? = data?.data
+                var imageUri: Uri? = data?.data
                 val bitmap: Bitmap? = imageUri?.let { contentResolver.openInputStream(it)?.use(BitmapFactory::decodeStream) }
 //                imageUri?.let { uri ->
 //                    // Load the image from URI using Glide
@@ -257,8 +279,9 @@ class UbahActivity : AppCompatActivity() {
                         .placeholder(R.drawable.account)
                         .error(R.drawable.account)
                         .into(findViewById(R.id.circleImageView))
+                    currentPhotoPath = bitmap.toString()
                 }
-                Log.i("Uri dari galeri", bitmap.toString())
+                Log.i("Uri dari galeri", imageUri.toString())
 //                }
 
             }
