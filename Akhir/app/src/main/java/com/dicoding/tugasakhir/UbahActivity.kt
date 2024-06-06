@@ -189,7 +189,7 @@ class UbahActivity : AppCompatActivity() {
                     // Dokumen ditemukan, ambil data username dari Firestore
                     val username = document.getString("username")
 
-                    // Set nilai username ke dalam EditText
+                    // Set nilai username ke dalam EditTexta
                     val usernameEditText = findViewById<EditText>(R.id.editText)
                     usernameEditText.setText(username)
                 } else {
