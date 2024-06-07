@@ -2,22 +2,27 @@ package com.dicoding.tugasakhir.ui.home
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.dicoding.tugasakhir.DetailActivity
 import com.dicoding.tugasakhir.ListRestaurantAdapter
 import com.dicoding.tugasakhir.R
-import com.dicoding.tugasakhir.Restaurant
+import com.dicoding.tugasakhir.Results
 import com.dicoding.tugasakhir.databinding.FragmentHomeBinding
+import com.google.android.material.search.SearchBar
+import com.google.android.material.search.SearchView
 
 class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
-    private lateinit var rvAnime: RecyclerView
-    private val list = ArrayList<Restaurant>()
+    private lateinit var listRestaurantAdapter: ListRestaurantAdapter
+    private var originalRestaurantList = mutableListOf<Results>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -26,48 +31,64 @@ class HomeFragment : Fragment() {
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
 
-        val root = binding.root
+        // Set up RecyclerView
+        binding.idRestaurant.layoutManager = LinearLayoutManager(requireContext())
+        binding.idRestaurant.setHasFixedSize(true)
 
-        rvAnime = binding.idRestaurant
-        rvAnime.setHasFixedSize(true)
+        // Initialize data from strings.xml
+        val restaurantNames = resources.getStringArray(R.array.data_restaurant_name)
+        val restaurantAddresses = resources.getStringArray(R.array.data_alamat_restaurant)
+        val restaurantDescriptions = resources.getStringArray(R.array.data_restaurant_description)
+        val restaurantOpeningHours = resources.getStringArray(R.array.data_alamat_jamBuka)
+        val restaurantContacts = resources.getStringArray(R.array.data_noTelp_restaurant)
+        val restaurantPhotos = resources.obtainTypedArray(R.array.data_photo)
 
-        list.addAll(getListAnime())
-        showRecyclerList()
+        for (i in restaurantNames.indices) {
+            originalRestaurantList.add(
+                Results(
+                    name = restaurantNames[i],
+                    address = restaurantAddresses[i],
+                    description = restaurantDescriptions[i],
+                    openingHours = restaurantOpeningHours[i],
+                    contact = restaurantContacts[i],
+                    photo = restaurantPhotos.getResourceId(i, -1)
+                )
+            )
+        }
 
-        return root
+        // Set up Adapter
+        listRestaurantAdapter = ListRestaurantAdapter { result ->
+            val intentToDetail = Intent(requireContext(), DetailActivity::class.java).apply {
+                putExtra("restaurant", result)
+            }
+            startActivity(intentToDetail)
+        }
+        binding.idRestaurant.adapter = listRestaurantAdapter
+        listRestaurantAdapter.submitList(originalRestaurantList)
+
+        // Set up SearchView
+        binding.searchView.setupWithSearchBar(binding.searchBar)
+        binding.searchView.editText.setOnEditorActionListener { _, _, _ ->
+            val query = binding.searchView.text.toString()
+            binding.searchView.hide()
+            filterRestaurants(query)
+            true
+        }
+
+        return binding.root
+    }
+
+    private fun filterRestaurants(query: String) {
+        val filteredList = originalRestaurantList.filter { restaurant ->
+            restaurant.name.contains(query, ignoreCase = true) ||
+                    restaurant.address.contains(query, ignoreCase = true) ||
+                    restaurant.description.contains(query, ignoreCase = true)
+        }
+        listRestaurantAdapter.submitList(filteredList)
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    private fun getListAnime(): ArrayList<Restaurant> {
-        val dataName = resources.getStringArray(R.array.data_restaurant_name)
-        val dataDescription = resources.getStringArray(R.array.data_restaurant_description)
-        val dataPhoto = resources.obtainTypedArray(R.array.data_photo)
-        val dataAlamat = resources.getStringArray(R.array.data_alamat_restaurant)
-        val dataNoTelp = resources.getStringArray(R.array.data_noTelp_restaurant)
-        val dataJamBuka = resources.getStringArray(R.array.data_alamat_jamBuka)
-        val listRestaurant = ArrayList<Restaurant>()
-        for (i in dataName.indices){
-            val restaurant = Restaurant(dataName[i], dataDescription[i], dataPhoto.getResourceId(i,-1), dataAlamat[i], dataNoTelp[i].toString(), dataJamBuka[i])
-            listRestaurant.add(restaurant)
-        }
-        return listRestaurant
-    }
-
-    private fun showRecyclerList() {
-        rvAnime.layoutManager = LinearLayoutManager(requireContext())
-        val listRestaurantAdapter = ListRestaurantAdapter(list, onClick = {})
-        rvAnime.adapter = listRestaurantAdapter
-
-        listRestaurantAdapter.setOnItemClickCallback(object : ListRestaurantAdapter.OnItemClickCallback {
-            override fun onItemClicked(data: Restaurant) {
-                val intentToDetail = Intent(requireContext(), DetailActivity::class.java)
-                intentToDetail.putExtra("anime", data)
-                startActivity(intentToDetail)
-            }
-        })
     }
 }
