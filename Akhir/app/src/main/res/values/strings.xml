@@ -22,6 +22,8 @@
     <string name="kontak">Kontak :</string>
     <string name="kontakk">kontakk</string>
     <string name="bukaa">Jam Buka :</string>
+    <string name="favorite">FAVORIT +</string>
+
     <string-array name="data_restaurant_name">
         <item>Sushi Express</item>
         <item>Burger King</item>
